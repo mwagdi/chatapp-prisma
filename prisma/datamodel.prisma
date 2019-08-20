@@ -1,0 +1,30 @@
+type User {
+  id: ID! @id
+  name: String!
+  email: String! @unique
+  chats: [Chat!]! @relation(name: "ChatToUser", onDelete: CASCADE)
+  messages: [Message!]! @relation(name: "MessageToUser", onDelete: CASCADE)
+}
+
+type Chat {
+  id: ID! @id
+  name: String
+  type: ChatType!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  users: [User!]! @relation(name: "ChatToUser", onDelete: SET_NULL)
+  messages: [Message!]! @relation(name: "MessageToChat", onDelete: CASCADE)
+}
+
+type Message {
+  id: ID! @id
+  text: String!
+  createdAt: DateTime! @createdAt
+  sender: User! @relation(name: "MessageToUser", onDelete: SET_NULL)
+  chat: Chat! @relation(name: "MessageToChat", onDelete: SET_NULL)
+}
+
+enum ChatType {
+  DIRECT
+  GROUP
+}
